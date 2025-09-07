@@ -27,7 +27,7 @@ def fetch(ticker):
 
     bar_size = high - low
     tail_percent = (tail / bar_size) * 100 if bar_size > 0 else 0
-    if tail_percent < 60 and tail_percent > -60: 
+    if tail_percent < 70 and tail_percent > -70: 
         tail_percent = 0
 
     return date, close, change, pct, tail_percent
@@ -96,5 +96,6 @@ if st.button("Get Market Data"):
                 f"Tail: `{tail:.1f}%`",
                 unsafe_allow_html=True
             )
+
 
 
