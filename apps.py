@@ -1,5 +1,6 @@
 import streamlit as st
 import yfinance as yf
+import time
 
 # Core logic: fetch latest OHLC and calculate tail dominance
 def fetch(ticker):
@@ -75,4 +76,5 @@ if st.button("Get Market Data"):
         for name, ticker in commodities.items():
             _, close, chg, pct, tail = fetch(ticker)
             st.markdown(f"**{name}**: `{close:.2f}` ({chg:+.2f}, {pct:+.2f}%) Tail: `{tail:.1f}%`")
+
 
