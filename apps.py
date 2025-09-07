@@ -3,6 +3,7 @@ import yfinance as yf
 
 # Core logic: fetch latest OHLC and calculate tail dominance
 def fetch(ticker):
+    time.sleep(1.5) 
     data = yf.Ticker(ticker).history(period="5d")
     latest = data.iloc[-1]
     date = data.index[-1].strftime("%Y-%m-%d")
@@ -74,3 +75,4 @@ if st.button("Get Market Data"):
         for name, ticker in commodities.items():
             _, close, chg, pct, tail = fetch(ticker)
             st.markdown(f"**{name}**: `{close:.2f}` ({chg:+.2f}, {pct:+.2f}%) Tail: `{tail:.1f}%`")
+
