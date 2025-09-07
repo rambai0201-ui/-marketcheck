@@ -4,7 +4,7 @@ import time
 
 # Core logic: fetch latest OHLC and calculate tail dominance
 def fetch(ticker):
-    time.sleep(1.5) 
+    time.sleep(1.5)  # Throttle to avoid rate limits
     data = yf.Ticker(ticker).history(period="5d")
     latest = data.iloc[-1]
     date = data.index[-1].strftime("%Y-%m-%d")
@@ -23,7 +23,7 @@ def fetch(ticker):
     if open_ < mid and close < mid:
         tail = high - max(open_, close)
     elif open_ > mid and close > mid:
-        tail = low - min(open_, close)
+        tail = min(open_, close) - low
 
     bar_size = high - low
     tail_percent = (tail / bar_size) * 100 if bar_size > 0 else 0
@@ -63,19 +63,34 @@ if st.button("Get Market Data"):
     with st.expander("📈 Indices", expanded=True):
         for name, ticker in indices.items():
             _, close, chg, pct, tail = fetch(ticker)
-            st.markdown(f"**{name}**: `{close:.2f}` ({chg:+.2f}, {pct:+.2f}%) Tail: `{tail:.1f}%`")
+            color = "green" if chg > 0 else "red"
+            st.markdown(
+                f"<span style='color:{color}; font-weight:bold'>{name}:</span> "
+                f"`{close:.2f}` <span style='color:{color}'>({chg:+.2f}, {pct:+.2f}%)</span> "
+                f"Tail: `{tail:.1f}%`",
+                unsafe_allow_html=True
+            )
 
     # Currencies
     with st.expander("💱 Currencies", expanded=True):
         for name, ticker in currencies.items():
             _, close, chg, pct, tail = fetch(ticker)
-            st.markdown(f"**{name}**: `{close:.4f}` ({chg:+.4f}, {pct:+.2f}%) Tail: `{tail:.1f}%`")
+            color = "green" if chg > 0 else "red"
+            st.markdown(
+                f"<span style='color:{color}; font-weight:bold'>{name}:</span> "
+                f"`{close:.4f}` <span style='color:{color}'>({chg:+.4f}, {pct:+.2f}%)</span> "
+                f"Tail: `{tail:.1f}%`",
+                unsafe_allow_html=True
+            )
 
     # Commodities
     with st.expander("🛢️ Commodities", expanded=True):
         for name, ticker in commodities.items():
             _, close, chg, pct, tail = fetch(ticker)
-            st.markdown(f"**{name}**: `{close:.2f}` ({chg:+.2f}, {pct:+.2f}%) Tail: `{tail:.1f}%`")
-
-
-
+            color = "green" if chg > 0 else "red"
+            st.markdown(
+                f"<span style='color:{color}; font-weight:bold'>{name}:</span> "
+                f"`{close:.2f}` <span style='color:{color}'>({chg:+.2f}, {pct:+.2f}%)</span> "
+                f"Tail: `{tail:.1f}%`",
+                unsafe_allow_html=True
+            )
