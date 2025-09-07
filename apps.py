@@ -23,7 +23,7 @@ def fetch(ticker):
     if open_ < mid and close < mid:
         tail = high - max(open_, close)
     elif open_ > mid and close > mid:
-        tail = min(open_, close) - low
+        tail = low - min(open_, close)
 
     bar_size = high - low
     tail_percent = (tail / bar_size) * 100 if bar_size > 0 else 0
@@ -94,3 +94,4 @@ if st.button("Get Market Data"):
                 f"Tail: `{tail:.1f}%`",
                 unsafe_allow_html=True
             )
+
