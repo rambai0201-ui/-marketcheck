@@ -23,7 +23,7 @@ def fetch(ticker):
     if open_ < mid and close < mid:
         tail = high - max(open_, close)
     elif open_ > mid and close > mid:
-        tail = min(open_, close) - low
+        tail = low - min(open_, close)
 
     bar_size = high - low
     tail_percent = (tail / bar_size) * 100 if bar_size > 0 else 0
@@ -76,5 +76,6 @@ if st.button("Get Market Data"):
         for name, ticker in commodities.items():
             _, close, chg, pct, tail = fetch(ticker)
             st.markdown(f"**{name}**: `{close:.2f}` ({chg:+.2f}, {pct:+.2f}%) Tail: `{tail:.1f}%`")
+
 
 
